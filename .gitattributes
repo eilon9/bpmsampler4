@@ -1,0 +1,12 @@
+# Force LF in the repo for all text files
+* text=auto eol=lf
+
+# Treat these as binary — no conversion
+*.vst3 binary
+*.dylib binary
+*.dll binary
+*.exe binary
+*.png binary
+*.wav binary
+*.aif binary
+*.aiff binary
