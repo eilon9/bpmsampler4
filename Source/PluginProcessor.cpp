@@ -1097,7 +1097,7 @@ void BPMSamplerProcessor::processSlotTimestretch (SampleSlot& slot, VoiceState& 
                                                    bool loop, int tsMode)
 {
     const auto& ptrs = slotPtrs[slotIdx];
-    const float  pitchNorm = ptrs.pitchParam ? ptrs.pitchParam->getValue() : *ptrs.pitch;
+    const float  pitchNorm = ptrs.pitchParam ? ptrs.pitchParam->getValue() : (float)*ptrs.pitch;
     double semitones = (double)slot.pitchCurve.applyToNorm (pitchNorm)
                      + voice.midiNotePitchSemitones;
     {
@@ -1140,7 +1140,7 @@ void BPMSamplerProcessor::processSlotGranular (SampleSlot& slot, VoiceState& voi
                                                double startSample, double endSample)
 {
     const auto& ptrs = slotPtrs[slotIdx];
-    const float  pitchNorm     = ptrs.pitchParam ? ptrs.pitchParam->getValue() : *ptrs.pitch;
+    const float  pitchNorm     = ptrs.pitchParam ? ptrs.pitchParam->getValue() : (float)*ptrs.pitch;
     double pitchSemitones = (double)slot.pitchCurve.applyToNorm (pitchNorm)
                           + voice.midiNotePitchSemitones;
     {
@@ -1451,14 +1451,14 @@ void BPMSamplerProcessor::processOneSlot (int slotIdx, juce::AudioBuffer<float>&
     }
     if (endSample <= startSample + 1.0) endSample = startSample + 2.0;
 
-    const float  speedNorm = ptrs.speedParam ? ptrs.speedParam->getValue() : *ptrs.speed;
+    const float  speedNorm = ptrs.speedParam ? ptrs.speedParam->getValue() : (float)*ptrs.speed;
     double speed = (double)slot.speedCurve.applyToNorm (speedNorm);
     if (bpmSync)      speed = calculateEffectiveSpeed (slotIdx, speed, (double)nSmp / slot.sampleRate);
     else if (spdSync) speed = snapToMusicalSpeed (speed);
     speed *= juce::jlimit (0.5, 2.0, (double)*ptrs.speedFine);
     speed = juce::jlimit (0.01, 16.0, speed);
 
-    const float  pitchNorm    = ptrs.pitchParam ? ptrs.pitchParam->getValue() : *ptrs.pitch;
+    const float  pitchNorm    = ptrs.pitchParam ? ptrs.pitchParam->getValue() : (float)*ptrs.pitch;
     const double pitchSemitones = (double)slot.pitchCurve.applyToNorm (pitchNorm);
     const double srRatio      = slot.sampleRate / currentSampleRate;
     const int    n            = outBuf.getNumSamples();
